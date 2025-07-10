@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import Navbar from './Navbar';
 import Avatar from './Avatar';
-import { getAvatarUrl } from '../utils/api';
+import { getAvatarUrl, API_ENDPOINTS } from '../utils/api';
 
 function LandingPage() {
   console.log('LandingPage rendered');
@@ -16,7 +16,7 @@ function LandingPage() {
     async function fetchAllDoctors() {
       setLoadingAllDoctors(true);
       try {
-        const res = await fetch('/api/doctors');
+        const res = await fetch(API_ENDPOINTS.DOCTORS);
         const data = await res.json();
         console.log('Fetched doctors:', data.doctors);
         setAllDoctors(data.doctors || []);
