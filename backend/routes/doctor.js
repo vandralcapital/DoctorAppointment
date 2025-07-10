@@ -277,6 +277,17 @@ router.get('/:id', async (req, res) => {
   }
 });
 
+// Get all appointments for a specific doctor by ID (for public or cross-doctor access)
+router.get('/:id/appointments', async (req, res) => {
+  try {
+    const doctorId = req.params.id;
+    const appointments = await Appointment.find({ doctor: doctorId }).sort({ date: 1, time: 1 });
+    res.json({ appointments });
+  } catch (err) {
+    res.status(500).json({ message: 'Server error.' });
+  }
+});
+
 // CRUD for availableSlots
 // GET /slots - list all slots
 router.get('/slots', authenticateDoctor, async (req, res) => {
