@@ -22,7 +22,10 @@ app.use(helmet());
 
 // CORS: allow all origins, no credentials for public API
 app.use(cors({
-  origin: process.env.FRONTEND_URL || 'http://localhost:3000',
+  origin: [
+    'https://doctor-appointment-nu-six.vercel.app',
+    'http://localhost:3000'
+  ],
   credentials: true
 }));
 
