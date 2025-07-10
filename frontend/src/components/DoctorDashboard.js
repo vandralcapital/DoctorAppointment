@@ -6,10 +6,12 @@ import AvatarDropdown from './AvatarDropdown';
 import { useAuth } from '../context/AuthContext';
 import PatientProfilePage from './doctor-dashboard/PatientProfilePage';
 import PatientListPage from './doctor-dashboard/PatientListPage';
+import { API_ENDPOINTS } from '../utils/api';
 
 const fetchDoctorData = async () => {
   const token = localStorage.getItem('doctorToken');
-  const res = await fetch('http://localhost:5050/api/doctors/' + JSON.parse(localStorage.getItem('doctorInfo')).id, {
+  const doctorId = JSON.parse(localStorage.getItem('doctorInfo')).id;
+  const res = await fetch(API_ENDPOINTS.DOCTOR_BY_ID(doctorId), {
     headers: { 'Authorization': `Bearer ${token}` },
   });
   const data = await res.json();
@@ -18,7 +20,7 @@ const fetchDoctorData = async () => {
 
 const updateDoctorProfile = async (form) => {
   const token = localStorage.getItem('doctorToken');
-  const res = await fetch('http://localhost:5050/api/doctors/profile', {
+  const res = await fetch(API_ENDPOINTS.DOCTOR_PROFILE, {
     method: 'PATCH',
     headers: {
       'Content-Type': 'application/json',
@@ -115,7 +117,7 @@ const DoctorDashboard = () => {
       formData.append('avatar', file);
       const token = localStorage.getItem('doctorToken');
       try {
-        const res = await fetch('http://localhost:5050/api/doctors/profile/avatar', {
+        const res = await fetch(API_ENDPOINTS.DOCTOR_PROFILE_AVATAR, {
           method: 'POST',
           headers: {
             'Authorization': `Bearer ${token}`
@@ -140,7 +142,7 @@ const DoctorDashboard = () => {
   const avatarUrl = doctor.avatar?.startsWith('http')
     ? doctor.avatar
     : doctor.avatar
-      ? `http://localhost:5050/uploads/avatars/${doctor.avatar}`
+      ? `${API_ENDPOINTS.UPLOAD_BASE_URL}/uploads/avatars/${doctor.avatar}`
       : `https://ui-avatars.com/api/?name=${doctor.name}`;
 
   return (

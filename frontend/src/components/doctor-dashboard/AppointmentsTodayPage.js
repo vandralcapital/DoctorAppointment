@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
-
-const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5050';
+import { API_ENDPOINTS } from '../../utils/api';
 
 const AppointmentsTodayPage = () => {
   const [appointments, setAppointments] = useState([]);
@@ -15,7 +14,7 @@ const AppointmentsTodayPage = () => {
   useEffect(() => {
     const fetchAppointments = async () => {
       const token = localStorage.getItem('doctorToken');
-      const res = await fetch('http://localhost:5050/api/doctors/appointments', {
+      const res = await fetch(API_ENDPOINTS.DOCTOR_APPOINTMENTS, {
         headers: { 'Authorization': `Bearer ${token}` },
       });
       const data = await res.json();
@@ -45,7 +44,7 @@ const AppointmentsTodayPage = () => {
       const formData = new FormData();
       if (prescriptionFile) formData.append('file', prescriptionFile);
       if (prescriptionText) formData.append('text', prescriptionText);
-      const res = await fetch(`${API_BASE_URL}/api/doctors/appointments/${prescriptionModal.appt._id}/prescription`, {
+      const res = await fetch(`${API_ENDPOINTS.DOCTOR_APPOINTMENTS}/${prescriptionModal.appt._id}/prescription`, {
         method: 'PATCH',
         headers: { 'Authorization': `Bearer ${token}` },
         body: formData
@@ -65,7 +64,7 @@ const AppointmentsTodayPage = () => {
 
   function getPrescriptionUrl(appt) {
     if (appt.prescriptionFile) {
-      return `${API_BASE_URL}/uploads/prescriptions/${appt.prescriptionFile}`;
+      return `${API_ENDPOINTS.UPLOADS_PRESCRIPTIONS}/${appt.prescriptionFile}`;
     }
     return null;
   }

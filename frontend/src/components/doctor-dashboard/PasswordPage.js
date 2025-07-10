@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { API_ENDPOINTS } from '../../utils/api';
 
 // Password strength checker
 function getPasswordStrength(password) {
@@ -41,7 +42,7 @@ const PasswordPage = () => {
     setLoading(true);
     try {
       const token = localStorage.getItem('doctorToken');
-      const res = await fetch('http://localhost:5050/api/doctors/change-password', {
+      const res = await fetch(API_ENDPOINTS.DOCTOR_CHANGE_PASSWORD, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',

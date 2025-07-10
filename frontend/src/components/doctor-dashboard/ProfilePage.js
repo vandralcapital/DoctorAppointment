@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { FaEdit, FaUser } from 'react-icons/fa';
+import { API_ENDPOINTS } from '../../utils/api';
 
 const fetchDoctorData = async () => {
   const token = localStorage.getItem('doctorToken');
@@ -12,7 +13,7 @@ const fetchDoctorData = async () => {
     return null;
   }
   if (!doctorInfo || !doctorInfo.id) return null;
-  const res = await fetch('http://localhost:5050/api/doctors/' + doctorInfo.id, {
+  const res = await fetch(API_ENDPOINTS.DOCTOR_BY_ID(doctorInfo.id), {
     headers: { 'Authorization': `Bearer ${token}` },
   });
   const data = await res.json();
@@ -21,7 +22,7 @@ const fetchDoctorData = async () => {
 
 const updateDoctorProfile = async (form) => {
   const token = localStorage.getItem('doctorToken');
-  const res = await fetch('http://localhost:5050/api/doctors/profile', {
+  const res = await fetch(API_ENDPOINTS.DOCTOR_PROFILE, {
     method: 'PATCH',
     headers: {
       'Content-Type': 'application/json',
@@ -112,7 +113,7 @@ const ProfilePage = () => {
       formData.append('avatar', file);
       const token = localStorage.getItem('doctorToken');
       try {
-        const res = await fetch('http://localhost:5050/api/doctors/profile/avatar', {
+        const res = await fetch(API_ENDPOINTS.DOCTOR_PROFILE_AVATAR, {
           method: 'POST',
           headers: {
             'Authorization': `Bearer ${token}`
@@ -146,7 +147,7 @@ const ProfilePage = () => {
   const avatarUrl = doctor.avatar?.startsWith('http')
     ? doctor.avatar
     : doctor.avatar
-      ? `http://localhost:5050/uploads/avatars/${doctor.avatar}`
+      ? `${API_ENDPOINTS.UPLOAD_BASE_URL}/uploads/avatars/${doctor.avatar}`
       : `https://ui-avatars.com/api/?name=${doctor.name}`;
 
   return (

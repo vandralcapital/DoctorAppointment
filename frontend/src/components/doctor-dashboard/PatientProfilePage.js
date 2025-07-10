@@ -1,6 +1,7 @@
 // PatientProfilePage.js
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
+import { API_ENDPOINTS } from '../../utils/api';
 
 const PatientProfilePage = () => {
   const { patientId } = useParams();
@@ -16,7 +17,7 @@ const PatientProfilePage = () => {
       const token = localStorage.getItem('doctorToken');
       try {
         // Fetch patient info
-        const patientRes = await fetch(`http://localhost:5050/api/doctors/patients/${patientId}`, {
+        const patientRes = await fetch(API_ENDPOINTS.DOCTOR_PATIENT_PROFILE(patientId), {
           headers: { 'Authorization': `Bearer ${token}` },
         });
         if (!patientRes.ok) throw new Error('Failed to fetch patient info');
@@ -24,7 +25,7 @@ const PatientProfilePage = () => {
         setPatient(patientData.patient);
 
         // Fetch appointment history
-        const apptRes = await fetch(`http://localhost:5050/api/doctors/patients/${patientId}/appointments`, {
+        const apptRes = await fetch(API_ENDPOINTS.DOCTOR_PATIENT_APPOINTMENTS(patientId), {
           headers: { 'Authorization': `Bearer ${token}` },
         });
         if (!apptRes.ok) throw new Error('Failed to fetch appointments');
