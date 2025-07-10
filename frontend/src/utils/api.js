@@ -33,7 +33,7 @@ export const API_ENDPOINTS = {
   // General endpoints
   DOCTORS: `${API_BASE_URL}/api/doctors`,
   DOCTOR_BY_ID: (id) => `${API_BASE_URL}/api/doctors/${id}`,
-  BOOK_APPOINTMENT: (doctorId, bookingId) => `${API_BASE_URL}/api/doctors/${doctorId}/book/${bookingId}`,
+  BOOK_APPOINTMENT: (doctorId) => `${API_BASE_URL}/api/doctors/${doctorId}/appointments`,
 };
 
 export const UPLOAD_URLS = {
