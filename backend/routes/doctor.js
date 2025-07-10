@@ -391,4 +391,27 @@ router.post('/:doctorId/appointments', protect, async (req, res) => {
   }
 });
 
+// Book an appointment for a specific doctor by ID
+router.post('/:id/appointments', async (req, res) => {
+  try {
+    const doctorId = req.params.id;
+    const { patientName, date, time, treatment } = req.body;
+    // You can add more fields as needed
+
+    // Create the appointment
+    const appointment = await Appointment.create({
+      doctor: doctorId,
+      patientName,
+      date,
+      time,
+      treatment,
+      status: 'upcoming'
+    });
+
+    res.status(201).json({ appointment });
+  } catch (err) {
+    res.status(500).json({ message: 'Server error.' });
+  }
+});
+
 export default router; 
