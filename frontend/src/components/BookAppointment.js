@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import Avatar from './Avatar';
-import { getAvatarUrl } from '../utils/api';
+import { getAvatarUrl, API_ENDPOINTS } from '../utils/api';
 
 // Generate available slots for the next 7 days
 const generateAvailableDates = () => {
@@ -71,7 +71,7 @@ function BookAppointment() {
     }
     setConfirming(true);
     try {
-      await fetch(`/api/doctors/${doctorId}/appointments`, {
+      await fetch(API_ENDPOINTS.BOOK_APPOINTMENT(doctorId), {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
