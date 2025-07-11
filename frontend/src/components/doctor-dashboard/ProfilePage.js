@@ -144,11 +144,11 @@ const ProfilePage = () => {
   );
   if (!doctor) return <div className="p-10 text-center">Loading...</div>;
 
-  const avatarUrl = doctor.avatar?.startsWith('http')
+  const avatarUrl = doctor?.avatar?.startsWith('http')
     ? doctor.avatar
-    : doctor.avatar
+    : doctor?.avatar
       ? `${API_ENDPOINTS.UPLOAD_BASE_URL}/uploads/avatars/${doctor.avatar}`
-      : `https://ui-avatars.com/api/?name=${doctor.name}`;
+      : `https://ui-avatars.com/api/?name=${doctor?.name || 'Doctor'}`;
 
   return (
     <div className="w-full max-w-5xl flex flex-col md:flex-row gap-8">
