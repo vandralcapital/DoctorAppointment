@@ -152,6 +152,27 @@ const ProfilePage = () => {
 
   return (
     <div className="w-full max-w-5xl flex flex-col md:flex-row gap-8">
+      {/* Sidebar */}
+      <div className="w-full md:w-64 flex-shrink-0 mb-8 md:mb-0">
+        <div className="bg-white rounded-2xl shadow p-6 flex flex-col gap-4">
+          <div className="text-gray-400 font-bold text-xs mb-2">Main</div>
+          <nav className="flex flex-col gap-2">
+            <a href="/doctor-dashboard/profile" className="flex items-center gap-2 py-2 px-4 rounded-lg font-semibold text-blue-700 bg-blue-50">
+              <FaUser className="text-lg" /> Edit Profile
+            </a>
+            <a href="#" className="flex items-center gap-2 py-2 px-4 rounded-lg font-semibold text-gray-700 hover:bg-gray-100">
+              <span className="text-lg">🌐</span> Public Profile
+            </a>
+            <a href="/doctor-dashboard/appointments" className="flex items-center gap-2 py-2 px-4 rounded-lg font-semibold text-gray-700 hover:bg-gray-100">
+              <span className="text-lg">&#x1F4C5;</span> New Appointments
+            </a>
+            <a href="/doctor-dashboard/patients" className="flex items-center gap-2 py-2 px-4 rounded-lg font-semibold text-gray-700 hover:bg-gray-100">
+              <span className="text-lg">&#x1F465;</span> Patients
+            </a>
+          </nav>
+        </div>
+      </div>
+      {/* Main Content */}
       {/* Main Profile Card - single large card */}
       <div className="flex-1 flex flex-col items-center gap-6">
         {/* Profile Photo and Upload */}
