@@ -9,6 +9,26 @@ const userSchema = new mongoose.Schema({
     trim: true,
     maxlength: [50, 'Name cannot exceed 50 characters']
   },
+  age: {
+    type: Number,
+    min: 0,
+    max: 120
+  },
+  mobile: {
+    type: String,
+    trim: true,
+    maxlength: 20
+  },
+  city: {
+    type: String,
+    trim: true,
+    maxlength: 100
+  },
+  pinCode: {
+    type: String,
+    trim: true,
+    maxlength: 10
+  },
   email: {
     type: String,
     required: [true, 'Email is required'],

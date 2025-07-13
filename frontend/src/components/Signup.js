@@ -6,7 +6,11 @@ import Navbar from './Navbar';
 const Signup = () => {
   const [formData, setFormData] = useState({
     name: '',
+    age: '',
+    mobile: '',
     email: '',
+    city: '',
+    pinCode: '',
     password: '',
     confirmPassword: ''
   });
@@ -31,7 +35,12 @@ const Signup = () => {
   const validateForm = () => {
     const newErrors = {};
     if (!formData.name) newErrors.name = 'Name is required';
+    if (!formData.age) newErrors.age = 'Age is required';
+    if (formData.age && (isNaN(formData.age) || formData.age < 0 || formData.age > 120)) newErrors.age = 'Enter a valid age';
+    if (!formData.mobile) newErrors.mobile = 'Mobile is required';
     if (!formData.email) newErrors.email = 'Email is required';
+    if (!formData.city) newErrors.city = 'City is required';
+    if (!formData.pinCode) newErrors.pinCode = 'PinCode is required';
     if (!formData.password) newErrors.password = 'Password is required';
     if (formData.password.length < 8) newErrors.password = 'Password must be at least 8 characters';
     if (!formData.confirmPassword) newErrors.confirmPassword = 'Please confirm your password';
@@ -51,7 +60,11 @@ const Signup = () => {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           name: formData.name,
+          age: formData.age,
+          mobile: formData.mobile,
           email: formData.email,
+          city: formData.city,
+          pinCode: formData.pinCode,
           password: formData.password
         })
       });
@@ -120,8 +133,16 @@ const Signup = () => {
           <form onSubmit={handleSubmit} className="w-full flex flex-col gap-4">
             <input type="text" name="name" placeholder="Full Name" value={formData.name} onChange={handleChange} className="rounded-full px-5 py-3 border border-gray-200 focus:border-blue-700 focus:ring-0 bg-white text-base shadow-sm" autoComplete="name" />
             {errors.name && <span className="text-xs text-red-500 ml-2">{errors.name}</span>}
+            <input type="number" name="age" placeholder="Age" value={formData.age} onChange={handleChange} className="rounded-full px-5 py-3 border border-gray-200 focus:border-blue-700 focus:ring-0 bg-white text-base shadow-sm" min="0" max="120" />
+            {errors.age && <span className="text-xs text-red-500 ml-2">{errors.age}</span>}
+            <input type="text" name="mobile" placeholder="Mobile" value={formData.mobile} onChange={handleChange} className="rounded-full px-5 py-3 border border-gray-200 focus:border-blue-700 focus:ring-0 bg-white text-base shadow-sm" maxLength={20} />
+            {errors.mobile && <span className="text-xs text-red-500 ml-2">{errors.mobile}</span>}
             <input type="email" name="email" placeholder="Email" value={formData.email} onChange={handleChange} className={`rounded-full px-5 py-3 border border-gray-200 focus:border-blue-700 focus:ring-0 bg-white text-base shadow-sm ${errors.email ? 'border-red-400' : ''}`} autoComplete="username" />
             {errors.email && <span className="text-xs text-red-500 ml-2">{errors.email}</span>}
+            <input type="text" name="city" placeholder="City" value={formData.city} onChange={handleChange} className="rounded-full px-5 py-3 border border-gray-200 focus:border-blue-700 focus:ring-0 bg-white text-base shadow-sm" maxLength={100} />
+            {errors.city && <span className="text-xs text-red-500 ml-2">{errors.city}</span>}
+            <input type="text" name="pinCode" placeholder="PinCode" value={formData.pinCode} onChange={handleChange} className="rounded-full px-5 py-3 border border-gray-200 focus:border-blue-700 focus:ring-0 bg-white text-base shadow-sm" maxLength={10} />
+            {errors.pinCode && <span className="text-xs text-red-500 ml-2">{errors.pinCode}</span>}
             <input type="password" name="password" placeholder="Password" value={formData.password} onChange={handleChange} className={`rounded-full px-5 py-3 border border-gray-200 focus:border-blue-700 focus:ring-0 bg-white text-base shadow-sm ${errors.password ? 'border-red-400' : ''}`} autoComplete="new-password" />
             {errors.password && <span className="text-xs text-red-500 ml-2">{errors.password}</span>}
             <input type="password" name="confirmPassword" placeholder="Confirm Password" value={formData.confirmPassword} onChange={handleChange} className={`rounded-full px-5 py-3 border border-gray-200 focus:border-blue-700 focus:ring-0 bg-white text-base shadow-sm ${errors.confirmPassword ? 'border-red-400' : ''}`} autoComplete="new-password" />

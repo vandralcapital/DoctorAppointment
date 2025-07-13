@@ -8,17 +8,27 @@ A modern, full-stack doctor appointment booking system built with React, Node.js
 - 🔐 User registration and login
 - 🔍 Browse and search doctors by specialization
 - 📅 Book appointments with available time slots
-- 📋 View and manage appointments
+- 🔢 Receive OTP for appointment verification
+- 📋 View and manage appointments with treatment states
+- 💊 View prescriptions and doctor notes
+- ⭐ Rate appointments with 10-star system
 - 👤 User profile management
 - 🎨 Modern, responsive UI
 
 ### For Doctors
 - 👨‍⚕️ Doctor registration and login
 - 📊 Dashboard with appointment management
+- 🔢 OTP verification for patient arrivals
+- 🏥 Treatment state management (pending → verified → treated)
+- 💊 Prescription management (text and file uploads)
+- 📝 Doctor notes and patient records
 - 👥 Patient list and profiles
 - 💰 Payment and transaction tracking
 - 📈 Analytics and reports
 - ⚙️ Profile and settings management
+- 📝 **Profile Draft → Preview → Publish workflow**
+- 👀 **Professional profile management with rich content**
+- 🌐 **Public profile visibility control**
 
 ### Technical Features
 - 🔒 JWT-based authentication
@@ -34,6 +44,10 @@ A modern, full-stack doctor appointment booking system built with React, Node.js
 - 🖼️ Avatar upload and management
 - 🔔 Real-time notifications (Socket.io ready)
 - 💳 Payment integration (Razorpay ready)
+- 🔢 OTP-based appointment verification system
+- 🏥 Treatment state workflow management
+- ⭐ Patient review and rating system
+- 💊 Prescription management system
 
 ## Tech Stack
 
@@ -164,6 +178,62 @@ npm start
 
 The frontend will run on `http://localhost:3000`
 
+## Doctor Profile Management System
+
+The system implements a comprehensive **Draft → Preview → Publish** workflow for doctor profiles:
+
+### Profile Workflow
+1. **Draft Creation**: Doctors create and edit their professional profiles
+2. **Preview Mode**: Doctors can preview how their profile will appear to patients
+3. **Publication**: Doctors publish their profile to make it visible to patients
+4. **Public View**: Patients can view published profiles and book appointments
+
+### Profile Features
+- **Rich Content**: Education, certifications, experience, achievements, publications
+- **Professional Details**: Consultation fees, duration, languages, specialties
+- **Social Links**: LinkedIn, Twitter, personal website
+- **Contact Information**: Phone, location, map links
+- **Avatar Management**: Professional photo upload and display
+- **Publication Control**: Complete control over profile visibility
+
+### Profile States
+- **Draft**: Private editing mode, not visible to patients
+- **Published**: Publicly visible to patients for booking
+- **Unpublished**: Profile exists but not visible to patients
+
+## OTP-Based Appointment System
+
+The system implements a comprehensive OTP-based appointment verification workflow:
+
+### Patient Booking Flow
+1. **Appointment Booking**: Patient books appointment and receives a 6-digit OTP
+2. **OTP Display**: OTP is prominently displayed after booking for easy access
+3. **Arrival Verification**: Patient shows OTP to doctor upon arrival
+4. **Treatment Process**: Doctor verifies OTP and manages treatment states
+5. **Review System**: Patient can rate experience after treatment (1-10 stars)
+
+### Doctor Workflow
+1. **OTP Verification**: Doctor enters patient's OTP to verify arrival
+2. **Treatment States**: 
+   - `pending`: Appointment booked, patient not arrived
+   - `verified`: OTP verified, patient arrived
+   - `treated`: Treatment completed
+   - `no-show`: Patient didn't arrive
+3. **Prescription Management**: Upload files or write text prescriptions
+4. **Patient Notes**: Add doctor notes for patient records
+
+### Treatment State Management
+- **Pending**: Default state when appointment is booked
+- **Verified**: OTP verified, patient can be treated
+- **Treated**: Treatment completed, patient can leave review
+- **No-Show**: Patient didn't arrive (can be marked by doctor)
+
+### Review System
+- 10-star rating system (1-10 stars)
+- Optional comment field (500 characters max)
+- Only available for treated appointments
+- One review per appointment
+
 ## API Endpoints
 
 ### Authentication
@@ -187,11 +257,23 @@ The frontend will run on `http://localhost:3000`
 - `GET /api/doctors/appointments` - Get doctor appointments (protected)
 - `GET /api/doctors/patients` - Get doctor's patients (protected)
 
+### Doctor Profile Management
+- `GET /api/doctors/:id/draft` - Get doctor's draft profile (protected)
+- `PUT /api/doctors/:id/draft` - Update doctor's draft profile (protected)
+- `PUT /api/doctors/:id/publish` - Publish draft profile to public (protected)
+- `GET /api/doctors/:id/public` - Get doctor's public profile (no auth required)
+- `GET /api/doctors/:id/profile-status` - Get profile publication status (protected)
+
 ### Appointments
-- `POST /api/doctors/:id/book` - Book appointment
+- `POST /api/doctors/:id/book` - Book appointment (returns OTP)
 - `GET /api/appointments` - Get user appointments (protected)
 - `PUT /api/appointments/:id` - Update appointment (protected)
 - `DELETE /api/appointments/:id` - Cancel appointment (protected)
+- `GET /api/auth/appointments/:id` - Get appointment details with OTP (protected)
+- `POST /api/auth/appointments/:id/review` - Submit patient review (protected)
+- `POST /api/doctors/appointments/:id/verify-otp` - Verify patient OTP (doctor protected)
+- `PATCH /api/doctors/appointments/:id/treatment-state` - Update treatment state (doctor protected)
+- `GET /api/doctors/appointments/:id` - Get appointment details (doctor protected)
 
 ## Environment Variables
 

@@ -6,6 +6,26 @@ const pendingUserSchema = new mongoose.Schema({
     required: true,
     trim: true
   },
+  age: {
+    type: Number,
+    min: 0,
+    max: 120
+  },
+  mobile: {
+    type: String,
+    trim: true,
+    maxlength: 20
+  },
+  city: {
+    type: String,
+    trim: true,
+    maxlength: 100
+  },
+  pinCode: {
+    type: String,
+    trim: true,
+    maxlength: 10
+  },
   email: {
     type: String,
     required: true,

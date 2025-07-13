@@ -49,6 +49,10 @@ const PatientProfilePage = () => {
       <div className="mb-6">
         <div className="font-semibold text-lg">{patient.name}</div>
         <div className="text-gray-600">{patient.email}</div>
+        {patient.age && <div className="text-gray-600">Age: {patient.age}</div>}
+        {patient.mobile && <div className="text-gray-600">Mobile: {patient.mobile}</div>}
+        {patient.city && <div className="text-gray-600">City: {patient.city}</div>}
+        {patient.pinCode && <div className="text-gray-600">PinCode: {patient.pinCode}</div>}
       </div>
       <div>
         <h3 className="font-semibold text-lg mb-2">Appointment History</h3>
@@ -63,6 +67,7 @@ const PatientProfilePage = () => {
                   <th className="px-3 py-2 border">Time</th>
                   <th className="px-3 py-2 border">Treatment</th>
                   <th className="px-3 py-2 border">Status</th>
+                  <th className="px-3 py-2 border">Treatment State</th>
                 </tr>
               </thead>
               <tbody>
@@ -72,6 +77,15 @@ const PatientProfilePage = () => {
                     <td className="px-3 py-2 border">{appt.time}</td>
                     <td className="px-3 py-2 border">{appt.treatment}</td>
                     <td className="px-3 py-2 border">{appt.status}</td>
+                    <td className="px-3 py-2 border">
+                      {appt.treatmentState === 'treated'
+                        ? 'Treated'
+                        : appt.treatmentState === 'verified'
+                        ? 'Arrived'
+                        : appt.treatmentState === 'no-show'
+                        ? 'No Show'
+                        : 'Upcoming'}
+                    </td>
                   </tr>
                 ))}
               </tbody>

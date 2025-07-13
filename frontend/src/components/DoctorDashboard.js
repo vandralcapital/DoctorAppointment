@@ -139,11 +139,11 @@ const DoctorDashboard = () => {
 
   if (!doctor) return <div className="p-10 text-center">Loading...</div>;
 
-  const avatarUrl = doctor?.avatar?.startsWith('http')
+  const avatarUrl = doctor.avatar?.startsWith('http')
     ? doctor.avatar
-    : doctor?.avatar
+    : doctor.avatar
       ? `${API_ENDPOINTS.UPLOAD_BASE_URL}/uploads/avatars/${doctor.avatar}`
-      : `https://ui-avatars.com/api/?name=${doctor?.name || 'Doctor'}`;
+      : `https://ui-avatars.com/api/?name=${doctor?.name || ''}`;
 
   return (
     <div className="flex bg-[#f6f8fb] min-h-screen">

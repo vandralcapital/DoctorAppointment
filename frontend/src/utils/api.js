@@ -30,10 +30,24 @@ export const API_ENDPOINTS = {
   DOCTOR_PATIENT_PROFILE: (patientId) => `${API_BASE_URL}/api/doctors/patients/${patientId}`,
   DOCTOR_PATIENT_APPOINTMENTS: (patientId) => `${API_BASE_URL}/api/doctors/patients/${patientId}/appointments`,
   
+  // Doctor Profile Management endpoints
+  DOCTOR_DRAFT_PROFILE: (doctorId) => `${API_BASE_URL}/api/doctors/${doctorId}/draft`,
+  DOCTOR_PUBLIC_PROFILE: (doctorId) => `${API_BASE_URL}/api/doctors/${doctorId}/public`,
+  DOCTOR_PROFILE_STATUS: (doctorId) => `${API_BASE_URL}/api/doctors/${doctorId}/profile-status`,
+  DOCTOR_PUBLISH_PROFILE: (doctorId) => `${API_BASE_URL}/api/doctors/${doctorId}/publish`,
+  
   // General endpoints
   DOCTORS: `${API_BASE_URL}/api/doctors`,
   DOCTOR_BY_ID: (id) => `${API_BASE_URL}/api/doctors/${id}`,
   BOOK_APPOINTMENT: (doctorId) => `${API_BASE_URL}/api/doctors/${doctorId}/appointments`,
+  
+  // Appointment management endpoints
+  APPOINTMENT_DETAILS: (id) => `${API_BASE_URL}/api/auth/appointments/${id}`,
+  SUBMIT_REVIEW: (id) => `${API_BASE_URL}/api/auth/appointments/${id}/review`,
+  DOCTOR_APPOINTMENT_DETAILS: (id) => `${API_BASE_URL}/api/doctors/appointments/${id}`,
+  VERIFY_OTP: (id) => `${API_BASE_URL}/api/doctors/appointments/${id}/verify-otp`,
+  UPDATE_TREATMENT_STATE: (id) => `${API_BASE_URL}/api/doctors/appointments/${id}/treatment-state`,
+  DOCTOR_SUBMIT_REVIEW: (id) => `${API_BASE_URL}/api/doctors/appointments/${id}/review`,
 };
 
 export const UPLOAD_URLS = {

@@ -32,7 +32,6 @@ const DoctorAccess = lazy(() => import('./components/doctor-dashboard/AccessPage
 const DoctorSessions = lazy(() => import('./components/doctor-dashboard/SessionsPage'));
 const PatientListPage = React.lazy(() => import('./components/doctor-dashboard/PatientListPage'));
 const PatientProfilePage = React.lazy(() => import('./components/doctor-dashboard/PatientProfilePage'));
-const PublicProfilePage = React.lazy(() => import('./components/doctor-dashboard/PublicProfilePage'));
 
 function App() {
   return (
@@ -61,7 +60,6 @@ function App() {
               <Route path="sessions" element={<Suspense fallback={<div>Loading...</div>}><DoctorSessions /></Suspense>} />
               <Route path="patients" element={<Suspense fallback={<div>Loading...</div>}><PatientListPage /></Suspense>} />
               <Route path="patients/:patientId" element={<Suspense fallback={<div>Loading...</div>}><PatientProfilePage /></Suspense>} />
-              <Route path="public-profile" element={<Suspense fallback={<div>Loading...</div>}><PublicProfilePage /></Suspense>} />
             </Route>
             <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
             <Route path="/book/:doctorId/:bookingId" element={<BookAppointment />} />

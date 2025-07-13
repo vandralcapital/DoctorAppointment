@@ -47,7 +47,7 @@ router.post('/signup',
   validateSignup,
   async (req, res) => {
     try {
-      const { name, email, password } = req.body;
+      const { name, email, password, age, mobile, city, pinCode } = req.body;
 
       // Check if user already exists
       const userExists = await User.findOne({ email });
@@ -76,6 +76,10 @@ router.post('/signup',
         name,
         email,
         password, // store as plain text for now
+        age,
+        mobile,
+        city,
+        pinCode,
         otp,
         otpExpires
       });
@@ -122,6 +126,10 @@ router.post('/verify-otp', sanitizeInput, async (req, res) => {
       name: pending.name,
       email: pending.email,
       password: hashedPassword,
+      age: pending.age,
+      mobile: pending.mobile,
+      city: pending.city,
+      pinCode: pending.pinCode,
       isEmailVerified: true
     });
     await PendingUser.deleteOne({ email });
@@ -252,6 +260,24 @@ router.get('/profile', protect, async (req, res) => {
   }
 });
 
+// @desc    Update user profile
+// @route   PATCH /api/auth/profile
+// @access  Private
+router.patch('/profile', protect, async (req, res) => {
+  try {
+    const updates = {};
+    const allowed = ['name', 'age', 'mobile', 'city', 'pinCode'];
+    allowed.forEach(field => {
+      if (req.body[field] !== undefined) updates[field] = req.body[field];
+    });
+    const user = await User.findByIdAndUpdate(req.user._id, updates, { new: true });
+    if (!user) return res.status(404).json({ success: false, message: 'User not found' });
+    res.json({ success: true, user });
+  } catch (error) {
+    res.status(500).json({ success: false, message: 'Server error', error: error.message });
+  }
+});
+
 // @desc    Change user password
 // @route   POST /api/auth/change-password
 // @access  Private
@@ -305,6 +331,67 @@ router.get('/my-appointments', protect, async (req, res) => {
     res.json({ success: true, appointments });
   } catch (error) {
     console.error('Get my appointments error:', error);
+    res.status(500).json({ success: false, message: 'Server error', error: error.message });
+  }
+});
+
+// @desc    Get appointment details with OTP for patient
+// @route   GET /api/auth/appointments/:id
+// @access  Private
+router.get('/appointments/:id', protect, async (req, res) => {
+  try {
+    const appointment = await Appointment.findOne({ _id: req.params.id, patient: req.user._id })
+      .populate('doctor', 'name specialization email avatar');
+    
+    if (!appointment) {
+      return res.status(404).json({ success: false, message: 'Appointment not found.' });
+    }
+    
+    res.json({ success: true, appointment });
+  } catch (error) {
+    console.error('Get appointment error:', error);
+    res.status(500).json({ success: false, message: 'Server error', error: error.message });
+  }
+});
+
+// @desc    Submit review for appointment
+// @route   POST /api/auth/appointments/:id/review
+// @access  Private
+router.post('/appointments/:id/review', protect, async (req, res) => {
+  try {
+    const { rating, comment } = req.body;
+    if (!rating || rating < 1 || rating > 10) {
+      return res.status(400).json({ success: false, message: 'Valid rating (1-10) is required.' });
+    }
+    
+    const appointment = await Appointment.findOne({ _id: req.params.id, patient: req.user._id });
+    if (!appointment) {
+      return res.status(404).json({ success: false, message: 'Appointment not found.' });
+    }
+    
+    if (appointment.treatmentState !== 'treated') {
+      return res.status(400).json({ success: false, message: 'Can only review appointments that have been treated.' });
+    }
+    
+    if (appointment.review && appointment.review.rating) {
+      return res.status(400).json({ success: false, message: 'Review already exists for this appointment.' });
+    }
+    
+    appointment.review = {
+      rating,
+      comment: comment || '',
+      createdAt: new Date()
+    };
+    
+    await appointment.save();
+    
+    res.json({ 
+      success: true,
+      message: 'Review submitted successfully.',
+      appointment 
+    });
+  } catch (error) {
+    console.error('Submit review error:', error);
     res.status(500).json({ success: false, message: 'Server error', error: error.message });
   }
 });

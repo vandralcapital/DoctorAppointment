@@ -57,7 +57,13 @@ const ProfilePage = () => {
         email: doc.email || '',
         phone: doc.phone || '',
         location: doc.location || '',
+        locationLink: doc.locationLink || '',
         bio: doc.bio || '',
+        hospitalName: doc.hospitalName !== undefined ? doc.hospitalName : '',
+        department: doc.department !== undefined ? doc.department : '',
+        qualification: doc.qualification || '',
+        specialization: doc.specialization || '',
+        yearsOfExperience: doc.yearsOfExperience || '',
       });
       calculateProgress(doc);
     });
@@ -80,11 +86,16 @@ const ProfilePage = () => {
 
   const handleFormChange = (e) => {
     const { name, value } = e.target;
-    setForm((prev) => ({ ...prev, [name]: value }));
+    setForm((prev) => {
+      const updated = { ...prev, [name]: value };
+      console.log('Form state after change:', updated); // DEBUG
+      return updated;
+    });
   };
 
   const handleSave = async (fields) => {
     const updateFields = fields.reduce((acc, key) => { acc[key] = form[key]; return acc; }, {});
+    console.log('Saving doctor profile fields:', fields, 'Payload:', updateFields); // DEBUG
     const res = await updateDoctorProfile(updateFields);
     if (res.doctor) {
       setDoctor(res.doctor);
@@ -95,7 +106,13 @@ const ProfilePage = () => {
         email: res.doctor.email || '',
         phone: res.doctor.phone || '',
         location: res.doctor.location || '',
+        locationLink: res.doctor.locationLink || '',
         bio: res.doctor.bio || '',
+        hospitalName: res.doctor.hospitalName !== undefined ? res.doctor.hospitalName : '',
+        department: res.doctor.department !== undefined ? res.doctor.department : '',
+        qualification: res.doctor.qualification || '',
+        specialization: res.doctor.specialization || '',
+        yearsOfExperience: res.doctor.yearsOfExperience || '',
       });
       calculateProgress(res.doctor);
     } else {
@@ -144,35 +161,14 @@ const ProfilePage = () => {
   );
   if (!doctor) return <div className="p-10 text-center">Loading...</div>;
 
-  const avatarUrl = doctor?.avatar?.startsWith('http')
+  const avatarUrl = doctor.avatar?.startsWith('http')
     ? doctor.avatar
-    : doctor?.avatar
+    : doctor.avatar
       ? `${API_ENDPOINTS.UPLOAD_BASE_URL}/uploads/avatars/${doctor.avatar}`
-      : `https://ui-avatars.com/api/?name=${doctor?.name || 'Doctor'}`;
+      : `https://ui-avatars.com/api/?name=${doctor?.name || ''}`;
 
   return (
     <div className="w-full max-w-5xl flex flex-col md:flex-row gap-8">
-      {/* Sidebar */}
-      <div className="w-full md:w-64 flex-shrink-0 mb-8 md:mb-0">
-        <div className="bg-white rounded-2xl shadow p-6 flex flex-col gap-4">
-          <div className="text-gray-400 font-bold text-xs mb-2">Main</div>
-          <nav className="flex flex-col gap-2">
-            <a href="/doctor-dashboard/profile" className="flex items-center gap-2 py-2 px-4 rounded-lg font-semibold text-blue-700 bg-blue-50">
-              <FaUser className="text-lg" /> Edit Profile
-            </a>
-            <a href="#" className="flex items-center gap-2 py-2 px-4 rounded-lg font-semibold text-gray-700 hover:bg-gray-100">
-              <span className="text-lg">🌐</span> Public Profile
-            </a>
-            <a href="/doctor-dashboard/appointments" className="flex items-center gap-2 py-2 px-4 rounded-lg font-semibold text-gray-700 hover:bg-gray-100">
-              <span className="text-lg">&#x1F4C5;</span> New Appointments
-            </a>
-            <a href="/doctor-dashboard/patients" className="flex items-center gap-2 py-2 px-4 rounded-lg font-semibold text-gray-700 hover:bg-gray-100">
-              <span className="text-lg">&#x1F465;</span> Patients
-            </a>
-          </nav>
-        </div>
-      </div>
-      {/* Main Content */}
       {/* Main Profile Card - single large card */}
       <div className="flex-1 flex flex-col items-center gap-6">
         {/* Profile Photo and Upload */}
@@ -213,11 +209,7 @@ const ProfilePage = () => {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12">
               <div className="flex flex-col">
                 <label className="block text-gray-500 text-xs mb-1">Full Name</label>
-                {editSection === 'personal' ? (
-                  <input type="text" name="name" value={form.name} onChange={handleFormChange} className="w-full border rounded px-3 py-2" />
-                ) : (
-                  <div className="font-medium text-gray-800 break-words">{doctor.name}</div>
-                )}
+                <div className="font-medium text-gray-800 break-words">{doctor?.name || '-'}</div>
               </div>
               <div className="flex flex-col">
                 <label className="block text-gray-500 text-xs mb-1">Email</label>
@@ -225,16 +217,52 @@ const ProfilePage = () => {
               </div>
               <div className="flex flex-col">
                 <label className="block text-gray-500 text-xs mb-1">Phone</label>
+                <div className="font-medium text-gray-800 break-words">{doctor.phone || '-'}</div>
+              </div>
+              <div className="flex flex-col">
+                <label className="block text-gray-500 text-xs mb-1">Hospital Name</label>
                 {editSection === 'personal' ? (
-                  <input type="text" name="phone" value={form.phone} onChange={handleFormChange} className="w-full border rounded px-3 py-2" />
+                  <input type="text" name="hospitalName" value={form.hospitalName || ''} onChange={handleFormChange} className="w-full border rounded px-3 py-2" />
                 ) : (
-                  <div className="font-medium text-gray-800 break-words">{doctor.phone || '-'}</div>
+                  <div className="font-medium text-gray-800 break-words">{doctor.hospitalName || '-'}</div>
+                )}
+              </div>
+              <div className="flex flex-col">
+                <label className="block text-gray-500 text-xs mb-1">Department</label>
+                {editSection === 'personal' ? (
+                  <input type="text" name="department" value={form.department || ''} onChange={handleFormChange} className="w-full border rounded px-3 py-2" />
+                ) : (
+                  <div className="font-medium text-gray-800 break-words">{doctor.department || '-'}</div>
+                )}
+              </div>
+              <div className="flex flex-col">
+                <label className="block text-gray-500 text-xs mb-1">Qualification</label>
+                {editSection === 'personal' ? (
+                  <input type="text" name="qualification" value={form.qualification || ''} onChange={handleFormChange} className="w-full border rounded px-3 py-2" />
+                ) : (
+                  <div className="font-medium text-gray-800 break-words">{doctor.qualification || '-'}</div>
+                )}
+              </div>
+              <div className="flex flex-col">
+                <label className="block text-gray-500 text-xs mb-1">Specialization</label>
+                {editSection === 'personal' ? (
+                  <input type="text" name="specialization" value={form.specialization || ''} onChange={handleFormChange} className="w-full border rounded px-3 py-2" />
+                ) : (
+                  <div className="font-medium text-gray-800 break-words">{doctor.specialization || '-'}</div>
+                )}
+              </div>
+              <div className="flex flex-col">
+                <label className="block text-gray-500 text-xs mb-1">Experience (years)</label>
+                {editSection === 'personal' ? (
+                  <input type="number" name="yearsOfExperience" value={form.yearsOfExperience || ''} onChange={handleFormChange} className="w-full border rounded px-3 py-2" min="0" max="60" />
+                ) : (
+                  <div className="font-medium text-gray-800 break-words">{doctor.yearsOfExperience || '-'}</div>
                 )}
               </div>
             </div>
             {editSection === 'personal' && (
               <div className="flex gap-2 mt-2 justify-end">
-                <button type="button" className="bg-blue-600 text-white px-4 py-2 rounded" onClick={() => handleSave(['name', 'phone'])}>Save changes</button>
+                <button type="button" className="bg-blue-600 text-white px-4 py-2 rounded" onClick={() => handleSave(['hospitalName', 'department', 'qualification', 'specialization', 'yearsOfExperience'])}>Save changes</button>
                 <button type="button" className="bg-gray-200 text-gray-700 px-4 py-2 rounded" onClick={() => { setEditSection(null); setForm(doctor); }}>Cancel</button>
               </div>
             )}
@@ -246,16 +274,34 @@ const ProfilePage = () => {
               {editSection !== 'location' && <button className="text-gray-500 hover:text-blue-600 font-semibold flex items-center gap-1 absolute top-0 right-0" onClick={() => setEditSection('location')}><FaEdit className="text-sm" /> Edit</button>}
             </div>
             {editSection === 'location' ? (
-              <div className="flex gap-2 items-center justify-end">
-                <div className="relative w-full md:w-1/2">
+              <div className="flex flex-col md:flex-row gap-2 items-center justify-end w-full">
+                <div className="relative w-full md:w-1/2 mb-2 md:mb-0">
                   <span className="absolute left-3 top-2.5 text-gray-400"><FaUser /></span>
-                  <input type="text" name="location" value={form.location} onChange={handleFormChange} className="w-full border rounded pl-10 px-3 py-2" />
+                  <input type="text" name="location" placeholder="Clinic address, floor, etc." value={form.location} onChange={handleFormChange} className="w-full border rounded pl-10 px-3 py-2" />
                 </div>
-                <button type="button" className="bg-blue-600 text-white px-4 py-2 rounded" onClick={() => handleSave(['location'])}>Save changes</button>
-                <button type="button" className="bg-gray-200 text-gray-700 px-4 py-2 rounded" onClick={() => { setEditSection(null); setForm(doctor); }}>Cancel</button>
+                <div className="relative w-full md:w-1/2 mb-2 md:mb-0">
+                  <span className="absolute left-3 top-2.5 text-gray-400">🔗</span>
+                  <input type="text" name="locationLink" placeholder="Google Maps link (optional)" value={form.locationLink} onChange={handleFormChange} className="w-full border rounded pl-10 px-3 py-2" />
+                </div>
+                <div className="flex gap-2">
+                  <button type="button" className="bg-blue-600 text-white px-4 py-2 rounded" onClick={() => handleSave(['location', 'locationLink'])}>Save changes</button>
+                  <button type="button" className="bg-gray-200 text-gray-700 px-4 py-2 rounded" onClick={() => { setEditSection(null); setForm(doctor); }}>Cancel</button>
+                </div>
               </div>
             ) : (
-              <div className="font-medium text-gray-800">{doctor.location || '-'}</div>
+              <div className="flex flex-col gap-1">
+                <div className="font-medium text-gray-800">
+                  {doctor.address && (
+                    [doctor.address.line1, doctor.address.line2, doctor.address.city, doctor.address.district, doctor.address.state, doctor.address.pinCode]
+                      .filter(Boolean)
+                      .join(', ') || '-'
+                  )}
+                  {!doctor.address && (doctor.location || '-')}
+                </div>
+                {doctor.locationLink && (
+                  <a href={doctor.locationLink} target="_blank" rel="noopener noreferrer" className="text-blue-600 underline text-sm">View on Map</a>
+                )}
+              </div>
             )}
           </div>
           {/* Bio Row */}
